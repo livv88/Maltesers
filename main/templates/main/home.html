@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>{% block title %} BookVerse {% endblock %}</title>
+        {% load static %}
+        <link rel="stylesheet" href="{% static 'main/css/style.css' %}">
+        <script src="{% static 'main/js/scripts.js' %}" defer></script>
+    </head>
+    <body>
+        <div class="Header">
+            <div>
+                <img src="{% static 'main/library/logo.png' %}" alt="logo">
+            </div>
+            <input type="text" placeholder="Have a Book in Mind?" id="Search" onfocus="search(this)">
+            <div id="UserOptions">
+                {% if user.is_authenticated %}
+                    <form method="post" style="display:inline;">
+                        {% csrf_token %}
+                        <button type="submit" name="logout">Log Out</button>
+                    </form>
+                {% else %}
+                    <button onclick="signUp()">Sign Up</button>
+                    <button onclick="logIn()">Log In</button>
+                {% endif %}
+                <button onclick="toggleTheme()">Dark/Light Mode</button>
+            </div>
+        </div>
+        <div class="Body">
+            {% if MyBooks %}
+                <div class="MyBooks">
+                    <h1>My Books</h1>
+                    <div class="Books">
+                        {% for book in MyBooks %}
+                            <div class="Book" onclick="showAbout({{ book.id }})">
+                                <img src="{{ book.image.url }}" alt="{{ book.title }}">
+                                <div class="BookInfo">
+                                    <h2>{{ book.title }}</h2>
+                                    <p>By <span>{{ book.author }}</span></p>
+                                    <button onclick="signUp()">Details</button>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endif %}
+            {% if BestSellers %}
+                <div class="MyBooks">
+                    <h1>Best Sellers</h1>
+                    <div class="Books">
+                        {% for book in BestSellers %}
+                            <div class="Book" onclick="showAbout({{ book.id }})">
+                                <img src="{{ book.image.url }}" alt="{{ book.title }}">
+                                <div class="BookInfo">
+                                    <h2>{{ book.title }}</h2>
+                                    <p>By <span>{{ book.author }}</span></p>
+                                    <button onclick="signUp()">Details</button>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endif %}
+            {% if WeeklySeries %}
+                <div class="MyBooks">
+                    <h1>Weekly Series</h1>
+                    <div class="Books">
+                        {% for book in WeeklySeries %}
+                            <div class="Book" onclick="showAbout({{ book.id }})">
+                                <img src="{{ book.image.url }}" alt="{{ book.title }}">
+                                <div class="BookInfo">
+                                    <h2>{{ book.title }}</h2>
+                                    <p>By <span>{{ book.author }}</span></p>
+                                    <button>Details</button>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endif %}
+            {% if Horror %}
+                <div class="MyBooks">
+                    <h1>Horror</h1>
+                    <div class="Books">
+                        {% for book in Horror %}
+                            <div class="Book" onclick="showAbout({{ book.id }})">
+                                <img src="{{ book.image.url }}" alt="{{ book.title }}">
+                                <div class="BookInfo">
+                                    <h2>{{ book.title }}</h2>
+                                    <p>By <span>{{ book.author }}</span></p>
+                                    <button onclick="signUp()">Details</button>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endif %}
+            {% if Romance %}
+                <div class="MyBooks">
+                    <h1>Romance</h1>
+                    <div class="Books">
+                        {% for book in Romance %}
+                            <div class="Book" onclick="showAbout({{ book.id }})">
+                                <img src="{{ book.image.url }}" alt="{{ book.title }}">
+                                <div class="BookInfo">
+                                    <h2>{{ book.title }}</h2>
+                                    <p>By <span>{{ book.author }}</span></p>
+                                    <button onclick="signUp()">Details</button>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endif %}
+            {% if International %}
+                <div class="MyBooks">
+                    <h1>International</h1>
+                    <div class="Books">
+                        {% for book in International %}
+                            <div class="Book" onclick="showAbout({{ book.id }})">
+                                <img src="{{ book.image.url }}" alt="{{ book.title }}">
+                                <div class="BookInfo">
+                                    <h2>{{ book.title }}</h2>
+                                    <p>By <span>{{ book.author }}</span></p>
+                                    <button>Details</button>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endif %}
+            <footer>
+                <div class="Legal">
+                    <div>
+                        <h3>Contact Us</h3>
+                        <p>Email: <a href="mailto:customerservice@bookverse.com">customerservice@bookverse.com</a></p>
+                        <p>Phone: <a href="tel:+9609655438">+960 965-5438, Open from: Sun - Sat | 7:30 - 15:30</a></p>
+                        <div>
+                            <a href="#">Privacy Policy | </a>
+                            <a href="#">Terms of Service</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="SocialMedia">
+                    <p>&copy; 2025 BookVerse. All rights reserved.</p>
+                    <div>
+                        <a href="#"><img src="{% static 'main/library/fb.svg' %}" alt="Facebook"></a>
+                        <a href="#"><img src="{% static 'main/library/x.svg' %}" alt="X"></a>
+                        <a href="#"><img src="{% static 'main/library/insta.svg' %}" alt="Instagram"></a>
+                        <a href="#"><img src="{% static 'main/library/tiktok.svg' %}" alt="TikTok"></a>
+                    </div>
+                </div>
+            </footer>
+            <div class="Cart">
+                <h1><span>User</span>'s Cart</h1>
+                <nav id="CartItem">
+                    <div class="CartItem" style="display: none;">
+                        <img src="" alt="" class="cart-image">
+                        <div class="CartInfo">
+                            <h2 class="cart-title"></h2>
+                            <p class="cart-author"></p>
+                            <div>
+                                <span class="Discounted cart-discount"></span>
+                                <span class="Cost cart-cost"></span>
+                            </div>
+                        </div>
+                        <div class="CartActions">
+                            <button onclick="remove(this)"><img src="{% static 'main/library/delete.svg' %}" alt="delete"></button>
+                            <span class="Amount">1</span>
+                            <button onclick="add(this)"><img src="{% static 'main/library/add.svg' %}" alt="add"></button>
+                        </div>
+                    </div>
+                </nav>
+                <div id="Summary">
+                    <h1>Order Summary</h1>
+                    <div>
+                        <p>SubTotal <span>0.00$</span></p>
+                        <p>Discount <span>0.00$</span></p>
+                        <p>Total <span>FREE</span></p>
+                        <hr>
+                        <p>Free Shipping for all books!</p>
+                        <button><img src="{% static 'main/library/add2cart.svg' %}" alt="Add to cart"><p>Check Out</p></button>
+                    </div>
+                </div>
+            </div>
+            <div class="About">
+                <div id="image" onclick="hideAbout()">
+                    <img src="" alt="">
+                </div>
+                <div class="AboutInfo">
+                    <h1>Book Information</h1>
+                    <div>
+                        <h2 id="title"></h2>
+                        <p>Author: <span id="author"></span></p>
+                        <p>Rating: <span id="rating"></span></p>
+                        <p>Genre: <span id="genre"></span></p>
+                        <p>Pages: <span id="pages"></span></p>
+                        <p>Language: <span id="language"></span></p>
+                        <p>Publication Date: <span id="publication-date"></span></p>
+                        <p>Paperback: <span id="paperback"></span></p>
+                        <p>Hardcover: <span id="hardcover"></span></p>
+                        <p>Price: <span id="price"></span></p>
+                        <p>Discount: <span id="discount"></span></p>
+                        <p>Shipping Cost: <span id="shipping-cost"></span></p>
+                        <p>Reviews: <span id="reviews"></span></p>
+                        <p>Description: <span id="description"></span></p>
+                    </div>
+                    <div class="AboutActions">
+                        <button id="add-to-cart" onclick="addToCart()">Add to Cart</button>
+                        <button id="buy-now" onclick="buyNow()">Buy Now</button>
+                        <button id="close" onclick="hideAbout()">Write Review</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="Blur">
+            <div class="LogIn">
+                <form method="post" class="login-form">
+                    {% csrf_token %}
+                    <h1>Log In</h1>
+                    {% if login_error %}<p class="form-error">{{ login_error }}</p>{% endif %}
+                    {% for error in login_form.errors.values %}
+                        <p class="form-error">{{ error.0 }}</p>
+                    {% endfor %}
+                    {{ login_form.username }}
+                    {{ login_form.password }}
+                    <button type="submit" name="login">Log In</button>
+                    <a>Forgot your Password?</a>
+                </form>
+            </div>
+            <div class="SignUp">
+                <form method="post" class="signup-form">
+                    {% csrf_token %}
+                    <h1>Sign Up</h1>
+                    {% for error in register_form.errors.values %}
+                        <p class="form-error">{{ error.0 }}</p>
+                    {% endfor %}
+                    {{ register_form.username }}
+                    {{ register_form.email }}
+                    {{ register_form.phone }}
+                    {{ register_form.address }}
+                    {{ register_form.password1 }}
+                    {{ register_form.password2 }}
+                    <button type="submit" name="register">Sign Up</button>
+                </form>
+            </div>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,32 @@
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>{% block title %} BookVerse {% endblock %}</title>
+        {% load static %}
+        <style>
+            button {
+                position: absolute;
+                top: 20px;
+                right: 20px;
+                width: 10vw;
+                height: 5vh;
+                border: 1px solid white;
+                border-radius: 5px;
+                background-color: #653caa;
+                color: white;
+                font-weight: bolder;
+                cursor: pointer;
+                transition: all 0.5s ease-in-out;
+                z-index: 1000;
+                &:hover {
+                    background-color: #4b2c8f;
+                }   
+            }
+        </style>
+    </head>
+    <body style="position: relative; margin: 0; user-select: none; overflow: hidden;">
+        <img src="{% static 'main/library/landing.svg' %}" alt="Landing Image" style="position: absolute; top: 0; left: 0; width: 100vw; height: auto;">
+        <button onclick="window.location.href='{% url 'home' %}'">Get Started</button>
+    </body>
+</html>
